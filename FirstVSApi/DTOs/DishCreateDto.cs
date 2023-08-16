@@ -1,6 +1,6 @@
 ﻿namespace FirstVSApi.DTOs
 {
-    public record struct DishCreateDto(string Name, IngredientCreateDto ingredient);
+    public record struct DishCreateDto(string Name, List<IngredientCreateDto> ingredients);
     
 
     

@@ -30,16 +30,12 @@ namespace FirstVSApi.Controllers
                 Name = request.Name,
             };
 
-            var ingredient = new Ingredient
-            {
-                Name = request.ingredient.Name, Dish = newDish
-            };
+            var ingredients = request.Ing
 
-            
             _context.DishesTable.Add(newDish);
             await _context.SaveChangesAsync();
 
-            return Ok(await _context.DishesTable.Include(d => d.Ingredients).ToListAsync());
+            return Ok(await _context.DishesTable.Include(d => d.Ingredients).ToListAsync();
         }
     }
 }
