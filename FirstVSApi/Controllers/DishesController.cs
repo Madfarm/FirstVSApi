@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using FirstVSApi.Data;
 using FirstVSApi.Entities;
+using FirstVSApi.DTOs;
 
 namespace FirstVSApi.Controllers
 {
@@ -21,104 +22,24 @@ namespace FirstVSApi.Controllers
             _context = context;
         }
 
-        // GET: api/Dishes
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Dishes>>> GetDishesTable()
-        {
-          if (_context.DishesTable == null)
-          {
-              return NotFound();
-          }
-            return await _context.DishesTable.ToListAsync();
-        }
-
-        // GET: api/Dishes/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Dishes>> GetDishes(int id)
-        {
-          if (_context.DishesTable == null)
-          {
-              return NotFound();
-          }
-            var dishes = await _context.DishesTable.FindAsync(id);
-
-            if (dishes == null)
-            {
-                return NotFound();
-            }
-
-            return dishes;
-        }
-
-        // PUT: api/Dishes/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutDishes(int id, Dishes dishes)
-        {
-            if (id != dishes.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(dishes).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!DishesExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/Dishes
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Dishes>> PostDishes(Dishes dishes)
+        public async Task<ActionResult<List<Dish>>> CreateDish(DishCreateDto request)
         {
-          if (_context.DishesTable == null)
-          {
-              return Problem("Entity set 'DataContext.DishesTable'  is null.");
-          }
-            _context.DishesTable.Add(dishes);
+            var newDish = new Dish()
+            {
+                Name = request.Name,
+            };
+
+            var ingredient = new Ingredient
+            {
+                Name = request.ingredient.Name, Dish = newDish
+            };
+
+            
+            _context.DishesTable.Add(newDish);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetDishes", new { id = dishes.Id }, dishes);
-        }
-
-        // DELETE: api/Dishes/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteDishes(int id)
-        {
-            if (_context.DishesTable == null)
-            {
-                return NotFound();
-            }
-            var dishes = await _context.DishesTable.FindAsync(id);
-            if (dishes == null)
-            {
-                return NotFound();
-            }
-
-            _context.DishesTable.Remove(dishes);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool DishesExists(int id)
-        {
-            return (_context.DishesTable?.Any(e => e.Id == id)).GetValueOrDefault();
+            return Ok(await _context.DishesTable.Include(d => d.Ingredients).ToListAsync());
         }
     }
 }
