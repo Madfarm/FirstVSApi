@@ -44,7 +44,7 @@ namespace FirstVSApi.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Dish>>> Get()
         {
-            var dishes = await _context.DishesTable.ToListAsync();
+            var dishes = await _context.DishesTable.Include(d => d.Ingredients).ToListAsync();
 
             if (dishes.Count > 0)
             {
