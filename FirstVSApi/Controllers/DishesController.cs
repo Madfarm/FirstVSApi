@@ -54,5 +54,18 @@ namespace FirstVSApi.Controllers
             return BadRequest();
         }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Dish>> GetById(int id)
+        {
+            var dish = await _context.DishesTable.Include(d => d.Ingredients).FirstOrDefaultAsync(d => d.Id == id);
+
+            if (dish is not null)
+            {
+                return dish;
+            }
+
+            return NotFound();
+        }
+
     }
 }
