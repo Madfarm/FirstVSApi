@@ -22,7 +22,7 @@ namespace FirstVSApi.Controllers
             _context = context;
         }
 
-        //New method of structuring DTOs
+        //New method of structuring DTOs, more comments in the dtos
         [HttpPost]
         public async Task<ActionResult<List<Dish>>> CreateDish(DishCreateDto request)
         {
