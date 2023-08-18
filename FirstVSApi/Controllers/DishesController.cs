@@ -40,5 +40,19 @@ namespace FirstVSApi.Controllers
 
             return Ok(await _context.DishesTable.Include(d => d.Ingredients).ToListAsync());
         }
+
+        [HttpGet]
+        public async Task<ActionResult<List<Dish>>> Get()
+        {
+            var dishes = await _context.DishesTable.ToListAsync();
+
+            if (dishes.Count > 0)
+            {
+                return dishes;
+            }
+
+            return BadRequest();
+        }
+
     }
 }
