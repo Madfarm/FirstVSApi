@@ -73,7 +73,8 @@ namespace FirstVSApi.Controllers
         {
             var dish = GetById(id);
 
-
+            System.Diagnostics.Debug.WriteLine(dish);
+            Console.WriteLine(dish);
             return NoContent();
 
         }
