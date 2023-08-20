@@ -67,5 +67,16 @@ namespace FirstVSApi.Controllers
             return NotFound();
         }
 
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult> UpdateDish(int id)
+        {
+            var dish = GetById(id);
+
+
+            return NoContent();
+
+        }
+
     }
 }
